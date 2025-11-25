@@ -62,7 +62,10 @@ jobs:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_1FE0055872304D869628BAEDC4DE225B }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_FA3B1BB6EA224B60981554280D5CEEA6 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_215175ED7645438C974DE92AF55F422C }}
-
+      
+      - name: List files after download
+        run: ls -l
+        
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
