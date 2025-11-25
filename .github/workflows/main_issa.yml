@@ -32,16 +32,16 @@ jobs:
         run: |
           mkdir wwwroot
           cp -r .next node_modules public package.json next.config.ts wwwroot/
-          cp -r src wwwroot/
-          cp -r postcss.config.mjs tsconfig.json wwwroot/
-          cp -r eslint.config.mjs next-env.d.ts wwwroot/
-          cp -r README.md wwwroot/
+            cp -r src node-app/
+            cp -r postcss.config.mjs tsconfig.json node-app/
+            cp -r eslint.config.mjs next-env.d.ts node-app/
+            cp -r README.md node-app/
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
-          name: node-app
-          path: wwwroot
+              name: node-app
+              path: node-app
 
   deploy:
     runs-on: ubuntu-latest
@@ -56,15 +56,6 @@ jobs:
         with:
           name: node-app
 
-      - name: Move artifact contents to wwwroot
-        run: |
-          rm -rf wwwroot
-          mv node-app wwwroot
-      
-      - name: Clean wwwroot folder before deploy
-        run: |
-          if [ -d "wwwroot" ]; then rm -rf wwwroot/*; fi
-      
       - name: Login to Azure
         uses: azure/login@v2
         with:
@@ -78,5 +69,6 @@ jobs:
         with:
           app-name: 'issa'
           slot-name: 'Production'
-          package: wwwroot
+          package: node-app
+          clean: true
           
