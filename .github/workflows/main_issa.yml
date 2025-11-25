@@ -56,9 +56,9 @@ jobs:
         with:
           name: node-app
       
-        - name: Clean wwwroot folder before deploy
-          run: |
-            if [ -d "wwwroot" ]; then rm -rf wwwroot/*; fi
+      - name: Clean wwwroot folder before deploy
+        run: |
+          if [ -d "wwwroot" ]; then rm -rf wwwroot/*; fi
       
       - name: Login to Azure
         uses: azure/login@v2
