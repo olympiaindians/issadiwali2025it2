@@ -31,7 +31,7 @@ jobs:
       - name: Prepare wwwroot folder
         run: |
           mkdir node-app
-          cp -r .next node_modules public package.json next.config.ts node-app/
+            cp -r .next public package.json next.config.ts node-app/
             cp -r src node-app/
             cp -r postcss.config.mjs tsconfig.json node-app/
             cp -r eslint.config.mjs next-env.d.ts node-app/
