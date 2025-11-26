@@ -22,16 +22,37 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '20.x'
-      
       - name: Install dependencies
         run: npm install
-      - name: Build the app
-        run: npm run build
+      - name: npm build, and test
+        run: |
+          npx next telemetry disable # Disable Next.js telemetry
+          npm run build
+          npm run test --if-present
+
+      - name: List directory contents
+        run: |
+          ls -la
+
+      - name: Verify .next directory
+        run: |
+          if [ ! -d ".next" ]; then
+            echo ".next directory not found. Ensure the build step generates it."
+            exit 1
+          fi
+
+      - name: List .next directory contents
+        run: |
+          ls -la .next
+
+      - name: Debug .next directory contents before upload
+        run: |
+          find .next -type f
 
       - name: Prepare wwwroot folder
         run: |
-          mkdir node-app
-            cp -r .next public package.json next.config.ts node-app/
+            mkdir node-app
+            cp -r .next public package.json package-lock.json next.config.ts node-app/
             cp -r src node-app/
             cp -r postcss.config.mjs tsconfig.json node-app/
             cp -r eslint.config.mjs next-env.d.ts node-app/
@@ -40,8 +61,8 @@ jobs:
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
-              name: node-app
-              path: node-app
+          name: node-app
+          path: node-app
 
   deploy:
     runs-on: ubuntu-latest
@@ -74,4 +95,3 @@ jobs:
           slot-name: 'Production'
           package: .
           clean: true
-          
